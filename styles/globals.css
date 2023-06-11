@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+  @apply bg-gradient-to-r from-black via-indigo-500 to-indigo-700  h-full overflow-x-hidden;
+}
+
+#__next {
+  @apply h-full;
+}
+
+html {
+  @apply h-full;
+}
+/* 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -24,4 +36,5 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-}
+} 
+*/
