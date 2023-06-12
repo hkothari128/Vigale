@@ -8,6 +8,7 @@ import {
 import AccountMenu from "@/components/AccountMenu";
 import MobileMenu from "@/components/MobileMenu";
 import NavbarItem from "@/components/NavbarItem";
+import useInfoModalStore from "@/hooks/useInfoModalStore";
 
 const TOP_OFFSET = 66;
 
@@ -15,6 +16,7 @@ const Navbar = () => {
 	const [showAccountMenu, setShowAccountMenu] = useState(false);
 	const [showMobileMenu, setShowMobileMenu] = useState(false);
 	const [showBackground, setShowBackground] = useState(false);
+	const { isOpen, closeModal, openModal } = useInfoModalStore();
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -68,6 +70,12 @@ const Navbar = () => {
 					<MobileMenu visible={showMobileMenu} />
 				</div>
 				<div className="flex flex-row ml-auto gap-7 items-center">
+					<div
+						className="rounded-lg ml-auto py-2 px-3 mr-2 bg-indigo-500 text-white text-muted hover:opacity-80 cursor-pointer"
+						onClick={() => openModal()}
+					>
+						Add Video
+					</div>
 					<div
 						onClick={toggleAccountMenu}
 						className="flex flex-row items-center gap-2 cursor-pointer relative"

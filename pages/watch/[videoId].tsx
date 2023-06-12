@@ -1,13 +1,13 @@
 import React from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/router';
-import useMovie from '@/hooks/useMovie';
+import useVideo from '@/hooks/useVideo';
 
 const Watch = () => {
   const router = useRouter();
-  const { movieId } = router.query;
+  const { videoId } = router.query;
 
-  const { data } = useMovie(movieId as string);
+  const { data } = useVideo(videoId as string);
   
   return (
     <div className="h-screen w-screen bg-black">
@@ -17,7 +17,7 @@ const Watch = () => {
           <span className="font-light">Watching:</span> {data?.title}
         </p>
       </nav>
-      <video className="h-full w-full" autoPlay controls src={data?.videoUrl}></video>
+      <video className="h-full w-full" autoPlay controls src={data?.url}></video>
     </div>
   )
 }

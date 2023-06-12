@@ -9,10 +9,11 @@ import prismadb from '@/utils/prismadb';
 
 export const authOptions: AuthOptions = {
   providers: [
-    FacebookProvider({
-      clientId:process.env.FACEBOOK_ID || '',
-      clientSecret: process.env.FACEBOOK_SECRET || '',
-    }),
+    // FacebookProvider({
+    //   clientId:process.env.FACEBOOK_ID || '',
+    //   clientSecret: process.env.FACEBOOK_SECRET || '',
+      
+    // }),
     // GithubProvider({
     //   clientId: process.env.GITHUB_ID || '',
     //   clientSecret: process.env.GITHUB_SECRET || '',
@@ -20,6 +21,7 @@ export const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      
     }),
     Credentials({
       id: 'credentials',

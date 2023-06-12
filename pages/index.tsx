@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Billboard from "@/components/Billboard";
 import MovieList from "@/components/MovieList";
 import InfoModal from "@/components/InfoModal";
-import useMovieList from "@/hooks/useMovieList";
+import useMovieList from "@/hooks/useVideoList";
 import useFavorites from "@/hooks/useFavorites";
 import useInfoModalStore from "@/hooks/useInfoModalStore";
 import axios from "axios";
@@ -29,10 +29,9 @@ export async function getServerSideProps(context: NextPageContext) {
 }
 
 const Home = () => {
-	const { data: movies = [] } = useMovieList();
+	const { data: movies = [], mutate } = useMovieList();
 	const { data: favorites = [] } = useFavorites();
 	const { isOpen, closeModal, openModal } = useInfoModalStore();
-
 	useEffect(() => {
 		const moviesJSON = [
 			{
@@ -83,20 +82,21 @@ const Home = () => {
 		// 	addMovie(m);
 		// });
 		// addMovie(null);
-		console.log(movies[0]);
+		console.log(movies);
 	}, []);
 
 	return (
 		<>
-			<InfoModal visible={isOpen} onClose={closeModal} />
-			<Navbar />
+			<InfoModal
+				visible={isOpen}
+				onClose={closeModal}
+				successCallback={mutate}
+			/>
+			<Navbar openModal={openModal} />
 			<Billboard />
 			<div className="pb-40">
 				<MovieList title="Trending Now" data={movies} />
 				<MovieList title="My List" data={favorites} />
-			</div>
-			<div className="bg-purple-700" onClick={() => openModal()}>
-				ADD MOVIE
 			</div>
 		</>
 	);

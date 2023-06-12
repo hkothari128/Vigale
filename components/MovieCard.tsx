@@ -78,7 +78,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
           h-[12vw]
         "
 				/> */}
-        { isHovered && (<video onClick={redirectToWatch} poster={data?.thumbnailUrl} autoPlay muted src={data?.videoUrl}></video>)}
+        { isHovered && (<video onClick={redirectToWatch} poster={data?.thumbnailUrl} autoPlay muted src={data?.preview_url}></video>)}
 				<div
 					className="
           z-10
@@ -105,17 +105,18 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
             </div> */}
 					</div>
 					<p className="text-green-400 font-semibold mt-4">
-						{data.title}({new Date(data.date).getFullYear()})
+						{data.title}({new Date(data.upload_date).getFullYear()})
 						<span className="ml-2 text-white text-sm italic">
-							{data.description}
+							{data.description} 
 						</span>
 					</p>
 					<div className="flex flex-row mt-4 gap-2 items-center">
-						<p className="text-white text-[10px] lg:text-sm">{data.duration}</p>
+						
+						{data.tags.map(tag=><p className="video-tags">{tag.text}</p>)}
 					</div>
-					<div className="flex flex-row items-center gap-2 mt-4 text-[8px] text-white lg:text-sm">
+					{/* <div className="flex flex-row items-center gap-2 mt-4 text-[8px] text-white lg:text-sm">
 						<p>{data.genre}</p>
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</div>

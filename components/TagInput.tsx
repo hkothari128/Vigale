@@ -1,38 +1,42 @@
+import { Tag } from "@prisma/client";
 import React, { useState } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
-interface Props {}
+interface TagInputProps {
+	tags: any[];
+	setTags: any;
+	initTagList: any[];
+}
 
-const TagInput = (props: Props) => {
-	const {} = props;
+const TagInput: React.FC<TagInputProps> = ({ tags, setTags, initTagList }) => {
 	const KeyCodes = {
 		comma: 188,
 		enter: 13,
 	};
 	const [searched, setSearched] = useState("");
-	const inittagList = [
-		{ id: "a", text: "a" },
-		{ id: "b", text: "b" },
-		{ id: "c", text: "c" },
-		{ id: "d", text: "d" },
-		{ id: "e", text: "e" },
-		{ id: "f", text: "f" },
-		{ id: "g", text: "g" },
-		{ id: "h", text: "h" },
-		{ id: "ia", text: "ia" },
-		{ id: "b a", text: "b a" },
-		{ id: "c 1", text: "c 1" },
-		{ id: "d 2", text: "d 2" },
-		{ id: "x 3", text: "x 3" },
-		{ id: "b 34", text: "b 34" },
-	];
-	const [tagList, setTagList] = useState(inittagList);
+	// const inittagList = [
+	// 	{ id: "a", text: "a" },
+	// 	{ id: "b", text: "b" },
+	// 	{ id: "c", text: "c" },
+	// 	{ id: "d", text: "d" },
+	// 	{ id: "e", text: "e" },
+	// 	{ id: "f", text: "f" },
+	// 	{ id: "g", text: "g" },
+	// 	{ id: "h", text: "h" },
+	// 	{ id: "ia", text: "ia" },
+	// 	{ id: "b a", text: "b a" },
+	// 	{ id: "c 1", text: "c 1" },
+	// 	{ id: "d 2", text: "d 2" },
+	// 	{ id: "x 3", text: "x 3" },
+	// 	{ id: "b 34", text: "b 34" },
+	// ];
+	const [tagList, setTagList] = useState<Tag[]>(initTagList);
 	const delimiters = [KeyCodes.comma, KeyCodes.enter];
-	const [tags, setTags] = useState([
-		{ id: "Thailand", text: "Thailand" },
-		{ id: "India", text: "India" },
-		{ id: "Vietnam", text: "Vietnam" },
-		{ id: "Turkey", text: "Turkey" },
-	]);
+	// const [tags, setTags] = useState([
+	// 	{ id: "Thailand", text: "Thailand" },
+	// 	{ id: "India", text: "India" },
+	// 	{ id: "Vietnam", text: "Vietnam" },
+	// 	{ id: "Turkey", text: "Turkey" },
+	// ]);
 	const handleDelete = (i: any) => {
 		const deleted = tags.find((tag, index) => index == i);
 		setTags(tags.filter((tag, index) => index !== i));

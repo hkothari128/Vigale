@@ -16,9 +16,10 @@ const Billboard: React.FC = () => {
 
 
   return (
-    <div className="relative h-[56.25vw]">
+    data?
+    (<div className="relative h-[56.25vw]">
       
-      <video poster={data?.thumbnailUrl} className="w-full h-[56.25vw] object-cover brightness-[60%] transition duration-500" autoPlay muted loop src='https://res.cloudinary.com/dlk0tfo07/video/upload/e_preview:duration_15:max_seg_9:min_seg_dur_1/q_auto/f_auto/v1686471908/hmomeyv1xqf9fsmyhzkb.mp4'></video>
+      <video poster={data?.thumbnailUrl} className="w-full h-[56.25vw] object-cover brightness-[60%] transition duration-500" autoPlay muted loop src={data.preview_url}></video>
       <div className="absolute top-[30%] md:top-[40%] ml-4 md:ml-16">
         <p className="text-white text-1xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
           {data?.title}
@@ -52,7 +53,7 @@ const Billboard: React.FC = () => {
           </button> */}
         </div>
       </div>
-    </div>
+    </div>):(<h4 className='text-white'>No Videos added yet</h4 >)
   )
 }
 export default Billboard;

@@ -13,10 +13,10 @@ export default async function handler(
 
 		await serverAuth(req, res);
 
-		const moviesCount = await prismadb.movie.count();
+		const moviesCount = await prismadb.video.count();
 		const randomIndex = Math.floor(Math.random() * moviesCount);
 
-		const randomMovies = await prismadb.movie.findMany({
+		const randomMovies = await prismadb.video.findMany({
 			take: 1,
 			skip: randomIndex,
 		});
@@ -26,5 +26,7 @@ export default async function handler(
 		console.log(error);
 
 		return res.status(500).end();
+	} finally {
+		prismadb.$disconnect();
 	}
 }

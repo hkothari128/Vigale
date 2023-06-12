@@ -3,8 +3,8 @@ export interface MovieInterface {
 	title: string;
 	description: string;
 	thumbnailUrl: string;
+	preview_url: string;
 	videoUrl: string;
-	duration: string;
-	genre: string;
-	date: Date;
+	tags: any[];
+	upload_date: Date;
 }

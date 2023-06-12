@@ -13,25 +13,27 @@ export default async function handler(
 
 		await serverAuth(req, res);
 
-		const { movieId } = req.query;
+		const { videoId } = req.query;
 
-		if (typeof movieId !== "string") {
+		if (typeof videoId !== "string") {
 			throw new Error("Invalid Id");
 		}
 
-		if (!movieId) {
+		if (!videoId) {
 			throw new Error("Missing Id");
 		}
 
-		const movies = await prismadb.movie.findUnique({
+		const video = await prismadb.video.findUnique({
 			where: {
-				id: movieId,
+				id: videoId,
 			},
 		});
 
-		return res.status(200).json(movies);
+		return res.status(200).json(video);
 	} catch (error) {
 		console.log(error);
 		return res.status(500).end();
+	} finally {
+		prismadb.$disconnect();
 	}
 }

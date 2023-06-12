@@ -60,13 +60,29 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Movie {
+// model Movie {
+//   id           String   @id @default(dbgenerated("(uuid_generate_v4())::text")) @map("_id") @db.Text
+//   title        String
+//   description  String
+//   videoUrl     String
+//   thumbnailUrl String
+//   genre        String
+//   duration     String
+//   date         DateTime @default(now())
+// }
+model Tag {
+  id     String  @id
+  text   String
+  videos Video[]
+}
+
+model Video {
   id           String   @id @default(dbgenerated("(uuid_generate_v4())::text")) @map("_id") @db.Text
   title        String
   description  String
-  videoUrl     String
+  url          String
+  preview_url  String
   thumbnailUrl String
-  genre        String
-  duration     String
-  date         DateTime @default(now())
+  upload_date  DateTime @default(now())
+  tags         Tag[]
 }

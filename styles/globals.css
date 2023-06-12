@@ -57,11 +57,11 @@ body {
 
 /* Styles for selected tags */
 .ReactTags__selected span.ReactTags__tag {
-  @apply border-[#ddd] bg-rose-300 text-white text-sm inline-block p-1 m-1 rounded-sm
+  @apply border-[#ddd] bg-rose-300 text-white text-sm inline-block p-1 m-1 rounded-lg
 
 }
-span.ReactTags__tag {
-  @apply border-[#ddd] bg-rose-300 text-white text-sm inline-block p-1 mr-1 rounded-sm
+span.ReactTags__tag,.video-tags {
+  @apply border-[#ddd] bg-rose-300 text-white text-sm inline-block py-2 px-3 m-1 rounded-lg min-w-[5em] text-center
 
 }
 .ReactTags__selected{

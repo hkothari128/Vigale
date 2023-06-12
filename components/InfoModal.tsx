@@ -4,23 +4,31 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import PlayButton from "@/components/PlayButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import useInfoModalStore from "@/hooks/useInfoModalStore";
-import useMovie from "@/hooks/useMovie";
+import useVideo from "@/hooks/useVideo";
 import Input from "./Input";
 import axios from "axios";
 import TagInput from "./TagInput";
+import useTags from "@/hooks/useTagList";
+import { clone, now } from "lodash";
+import { Tag, Video } from "@prisma/client";
+
 
 interface InfoModalProps {
 	visible?: boolean;
 	onClose: any;
+	successCallback:Function
 }
 
 
-const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose }) => {
+const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose, successCallback }) => {
 	const [isVisible, setIsVisible] = useState<boolean>(!!visible);
 	const [videoFile, setVideo] = useState<File>();
 	const [loading, setLoading] = useState(false);
 	const [title, setTitle] = useState("");
+  const [tags, setTags] = useState<Tag[]>([]);
 	const [description, setDescription] = useState("");
+  const { data: initTagList = [] } = useTags();
+  const [progress, setProgress] = useState(0);
  
 
 	// const [tags, setTags] = useState([]);
@@ -44,11 +52,55 @@ const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose }) => {
 		formData.append("upload_preset", "vigale");
 		formData.append("cloud_name", "dlk0tfo07");
     setLoading(true)
-		const res = await axios.post(
-			"https://api.cloudinary.com/v1_1/dlk0tfo07/video/upload",
-			formData
-		);
-		if(!!res?.data?.url){
+    try{
+      const cloudinaryResponse = await axios.post(
+        "https://api.cloudinary.com/v1_1/dlk0tfo07/video/upload",
+        formData,{
+			headers: {
+			  "Content-Type": "multipart/form-data",
+			},
+			onUploadProgress: (progressEvent) => {
+				if(progressEvent.total){
+					console.log("UPLOAD",progressEvent)
+					const progress = (progressEvent.loaded / progressEvent.total) * 50;
+					setProgress(progress);
+				}
+			},
+			onDownloadProgress: (progressEvent) => {
+				if(progressEvent.total){
+					console.log("Download",progressEvent)
+					const progress = 50 + (progressEvent.loaded / progressEvent.total) * 50;
+					console.log(progress);
+					setProgress(progress);
+				}
+			},
+		  }
+      );
+
+      const newTags = tags.filter(tag=>!initTagList.includes(tag))
+	  let tagAddedResponse;
+     if(newTags?.length){
+		 tagAddedResponse = await axios.post("/api/tags",{
+		   newTags
+		 })
+	 } 
+
+      if(!!cloudinaryResponse?.data?.url && (!tagAddedResponse || tagAddedResponse.status==201)){
+        const video = {
+          title,
+          description,
+          url:cloudinaryResponse.data.url,
+          preview_url:cloudinaryResponse.data.url.replace('/upload/','/upload/e_preview:duration_15:max_seg_5:min_seg_dur_3/'),
+		  thumbnailUrl:cloudinaryResponse.data.url.substring(0,cloudinaryResponse.data.url.lastIndexOf('.')) + '.jpg',
+		  upload_date: new Date()
+        }
+		const videoAddedResponse = await axios.post("/api/videos",{videoData:video,tags:tags.map(tag=>({id:tag.id}))})
+		handleClose();
+		successCallback();
+      }
+    } catch(e){
+      console.log("ERROR",e)
+    } finally {
       setLoading(false)
     }
 		// formData.append("title", title);
@@ -190,14 +242,14 @@ const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose }) => {
 							</div>
 							<div className="w-full sm:w-2/3 px-4">
 								<div className="max-w-xl">
-                <TagInput />
+                <TagInput tags={tags} setTags={setTags} initTagList={clone(initTagList)} />
 								</div>
 							</div>
 						</div>
             
            
 					</div>
-					<div className="max-w-xl mx-auto text-center pb-4">
+					<div className="max-w-xl mx-auto text-center pb-4 cursor-pointer hover:opacity-80">
 						<div
 							onClick={() => addMovie()}
 							className="md:w-11/12 w-3/4 m-2 inline-block px-5 py-4 text-gray-700 font-semibold tracking-tight bg-white hover:bg-gray-100 rounded-lg focus:ring-4 focus:ring-gray-200 transition duration-200"
@@ -207,7 +259,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose }) => {
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
         <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
     </svg>
-    <span className="sr-only">Loading...</span>
+    <div className="sr-only text-black">Loading... {progress-0.23}</div>
 </div>}
 						</div>
 					</div>
