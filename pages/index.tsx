@@ -29,8 +29,8 @@ export async function getServerSideProps(context: NextPageContext) {
 }
 
 const Home = () => {
-	const { data: movies = [], mutate } = useMovieList();
-	const { data: favorites = [] } = useFavorites();
+	const { data: movies = [], mutate, isLoading:moviesLoading } = useMovieList();
+	const { data: favorites = [],isLoading:favouritesLoading } = useFavorites();
 	const { isOpen, closeModal, openModal } = useInfoModalStore();
 	useEffect(() => {
 		const moviesJSON = [
@@ -95,8 +95,8 @@ const Home = () => {
 			<Navbar openModal={openModal} />
 			<Billboard />
 			<div className="pb-40">
-				<MovieList title="Trending Now" data={movies} />
-				<MovieList title="My List" data={favorites} />
+				{moviesLoading ? <h1>Loading Vidoes</h1> :<MovieList title="Trending Now" data={movies} />}
+				{favouritesLoading?<h1>Loading Favourites</h1>:<MovieList title="My List" data={favorites} />}
 			</div>
 		</>
 	);

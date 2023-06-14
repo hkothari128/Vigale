@@ -7,7 +7,7 @@ import useInfoModalStore from '@/hooks/useInfoModalStore';
 
 const Billboard: React.FC = () => {
   const { openModal } = useInfoModalStore();
-  const { data } = useBillboard();
+  const { data,isLoading } = useBillboard();
 
   // const handleOpenModal = useCallback(() => {
   //   openModal(data?.id);
@@ -15,7 +15,7 @@ const Billboard: React.FC = () => {
 
 
 
-  return (
+  return (isLoading?(<h1>LOADING DATA</h1>):
     data?
     (<div className="relative h-[56.25vw]">
       
