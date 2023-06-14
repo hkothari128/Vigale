@@ -10,6 +10,7 @@ import useMovieList from "@/hooks/useVideoList";
 import useFavorites from "@/hooks/useFavorites";
 import useInfoModalStore from "@/hooks/useInfoModalStore";
 import axios from "axios";
+import useVideos from "@/hooks/useVideoList";
 
 export async function getServerSideProps(context: NextPageContext) {
 	const session = await getSession(context);
@@ -29,8 +30,8 @@ export async function getServerSideProps(context: NextPageContext) {
 }
 
 const Home = () => {
-	const { data: movies = [], mutate, isLoading:moviesLoading } = useMovieList();
-	const { data: favorites = [],isLoading:favouritesLoading } = useFavorites();
+	const { data: movies = [], mutate, isLoading: moviesLoading } = useVideos();
+	const { data: favorites = [], isLoading: favouritesLoading } = useFavorites();
 	const { isOpen, closeModal, openModal } = useInfoModalStore();
 	useEffect(() => {
 		const moviesJSON = [
@@ -83,7 +84,7 @@ const Home = () => {
 		// });
 		// addMovie(null);
 		console.log(movies);
-	}, []);
+	}, [movies]);
 
 	return (
 		<>
@@ -93,11 +94,27 @@ const Home = () => {
 				successCallback={mutate}
 			/>
 			<Navbar openModal={openModal} />
-			<Billboard />
-			<div className="pb-40">
-				{moviesLoading ? <h1>Loading Vidoes</h1> :<MovieList title="Trending Now" data={movies} />}
-				{favouritesLoading?<h1>Loading Favourites</h1>:<MovieList title="My List" data={favorites} />}
-			</div>
+			{movies.length ? (
+				<>
+					<Billboard />
+					<div className="pb-40">
+						{moviesLoading ? (
+							<h1>Loading Vidoes</h1>
+						) : (
+							<MovieList title="Trending Now" data={movies} />
+						)}
+						{favouritesLoading ? (
+							<h1>Loading Favourites</h1>
+						) : (
+							<MovieList title="My List" data={favorites} />
+						)}
+					</div>
+				</>
+			) : (
+				<div className="pt-64 text-white w-100 text-center text-4xl">
+					No Videos Added yet!!
+				</div>
+			)}
 		</>
 	);
 };

@@ -21,6 +21,7 @@ model User {
   updatedAt      DateTime  @updatedAt
   sessions       Session[]
   accounts       Account[]
+  videos         Video[]
   favoriteIds    String[]  @db.Uuid
 }
 
@@ -86,5 +87,5 @@ model Video {
   thumbnailUrl String
   upload_date  DateTime @default(now())
   tags         Tag[]
-  owner         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  owner        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

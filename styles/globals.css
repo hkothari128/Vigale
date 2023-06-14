@@ -61,7 +61,7 @@ body {
 
 }
 span.ReactTags__tag,.video-tags {
-  @apply border-[#ddd] bg-rose-300 text-white text-sm inline-block py-2 px-3 m-1 rounded-lg min-w-[5em] text-center
+  @apply border-[#ddd] bg-rose-300 text-white text-sm inline-block py-2 px-3 m-1 rounded-lg min-w-[5em] text-center overflow-hidden text-ellipsis h-8 whitespace-nowrap
 
 }
 .ReactTags__selected{

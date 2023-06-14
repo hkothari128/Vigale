@@ -112,9 +112,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
 							{data.description} 
 						</span>
 					</p>
-					<div className="flex flex-row mt-4 gap-2 items-center">
+					<div className="flex flex-row mt-4 gap-2 items-center flex-wrap">
 						
-						{data.tags.map(tag=><p className="video-tags">{tag.text}</p>)}
+						{data.tags.map(tag=><p className="video-tags w-8" title={tag.text}>{tag.text}</p>)}
 					</div>
 					{/* <div className="flex flex-row items-center gap-2 mt-4 text-[8px] text-white lg:text-sm">
 						<p>{data.genre}</p>

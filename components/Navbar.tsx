@@ -9,17 +9,24 @@ import AccountMenu from "@/components/AccountMenu";
 import MobileMenu from "@/components/MobileMenu";
 import NavbarItem from "@/components/NavbarItem";
 import useInfoModalStore from "@/hooks/useInfoModalStore";
+import { useRouter } from "next/router";
 
 const TOP_OFFSET = 66;
 
 interface NavbarProps {
-	openModal:Function
+	openModal: Function;
 }
-const Navbar:React.FC<NavbarProps> = ({openModal}) => {
+const Navbar: React.FC<NavbarProps> = ({ openModal }) => {
 	const [showAccountMenu, setShowAccountMenu] = useState(false);
 	const [showMobileMenu, setShowMobileMenu] = useState(false);
 	const [showBackground, setShowBackground] = useState(false);
-
+	const [active, setActive] = useState("home");
+	const router = useRouter();
+	const navLinks = [
+		{ id: "home", label: "Home", path: "/" },
+		{ id: "mylist", label: "My List", path: "/browse?showFavourites=true" },
+		{ id: "browse", label: "Browse All Videos", path: "/browse" },
+	];
 	useEffect(() => {
 		const handleScroll = () => {
 			console.log(window.scrollY);
@@ -45,6 +52,11 @@ const Navbar:React.FC<NavbarProps> = ({openModal}) => {
 		setShowMobileMenu((current) => !current);
 	}, []);
 
+	const navbarNavigate = (navLink: any) => {
+		setActive(navLink.id);
+		router.push(navLink.path);
+	};
+
 	return (
 		<nav className="w-full fixed z-40">
 			<div
@@ -54,10 +66,17 @@ const Navbar:React.FC<NavbarProps> = ({openModal}) => {
 			>
 				{/* <img src="/images/logo.png" className="h-4 lg:h-7" alt="Logo" /> */}
 				<div className="flex-row ml-8 gap-7 hidden lg:flex">
-					<NavbarItem label="Home" active />
+					{navLinks.map((navLink) => (
+						<div
+							className="cursor-pointer hover:opacity-80"
+							onClick={() => navbarNavigate(navLink)}
+						>
+							<NavbarItem label={navLink.label} active={active == navLink.id} />
+						</div>
+					))}
 
-					<NavbarItem label="My List" />
-					<NavbarItem label="Browse All Videos" />
+					{/* <NavbarItem label="My List" />
+					<NavbarItem label="Browse All Videos" /> */}
 				</div>
 				<div
 					onClick={toggleMobileMenu}

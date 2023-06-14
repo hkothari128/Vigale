@@ -4,6 +4,7 @@ import prismadb from "@/utils/prismadb";
 import serverAuth from "@/utils/serverAuth";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { data } from "autoprefixer";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default async function handler(
 	req: NextApiRequest,
@@ -13,7 +14,8 @@ export default async function handler(
 		// if (req.method !== "GET") {
 		// 	return res.status(405).end();
 		// }
-		await serverAuth(req, res);
+
+		const { currentUser } = await serverAuth(req, res);
 		if (req.method == "GET") {
 			const videos = await prismadb.video.findMany({
 				include: { tags: true },
@@ -27,6 +29,9 @@ export default async function handler(
 					...req.body.videoData,
 					tags: {
 						connect: req.body.tags,
+					},
+					owner: {
+						connect: { id: currentUser.id },
 					},
 				},
 			});

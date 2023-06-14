@@ -6,9 +6,17 @@ interface InputProps {
 	value: string;
 	label: string;
 	type?: string;
+	dark?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ id, onChange, value, label, type }) => {
+const Input: React.FC<InputProps> = ({
+	id,
+	onChange,
+	value,
+	label,
+	type,
+	dark = true,
+}) => {
 	return (
 		<div className="relative">
 			<input
@@ -16,7 +24,7 @@ const Input: React.FC<InputProps> = ({ id, onChange, value, label, type }) => {
 				value={value}
 				type={type}
 				id={id}
-				className="
+				className={`
         block
         rounded-md
         px-6
@@ -24,19 +32,18 @@ const Input: React.FC<InputProps> = ({ id, onChange, value, label, type }) => {
         pb-1
         w-full
         text-md
-      text-white
-      bg-neutral-700
+      ${dark && "bg-neutral-700 text-white"}
         appearance-none
         focus:outline-none
         focus:ring-0
         peer
         invalid:border-b-1
-        "
+        `}
 				placeholder=" "
 			/>
 			<label
 				htmlFor={id}
-				className="
+				className={`
         absolute 
         text-md
       text-zinc-400
@@ -52,7 +59,7 @@ const Input: React.FC<InputProps> = ({ id, onChange, value, label, type }) => {
         peer-placeholder-shown:translate-y-0 
         peer-focus:scale-75
         peer-focus:-translate-y-3
-      "
+      `}
 			>
 				{label}
 			</label>

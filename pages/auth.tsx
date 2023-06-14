@@ -32,7 +32,7 @@ const Auth = () => {
 	const [email, setEmail] = useState("");
 	const [name, setName] = useState("");
 	const [password, setPassword] = useState("");
-
+	const [error,setError] = useState('')
 	const [variant, setVariant] = useState("login");
 
 	const toggleVariant = useCallback(() => {
@@ -43,14 +43,17 @@ const Auth = () => {
 
 	const login = useCallback(async () => {
 		try {
-			await signIn("credentials", {
+			const loginResponse = await signIn("credentials", {
 				email,
 				password,
 				redirect: false,
 				callbackUrl: "/",
 			});
+			if(loginResponse?.status==401){
+				setError('Username or password is incorrect!')
+			}
 
-			router.push("/profiles");
+			router.push("/");
 		} catch (error) {
 			console.log(error);
 		}
@@ -82,6 +85,7 @@ const Auth = () => {
 						<h2 className="text-white text-4xl mb-8 font-semibold">
 							{variant === "login" ? "Sign in" : "Register"}
 						</h2>
+						{!!error && <p className="text-red-500 mb-2">{error}</p>}
 						<div className="flex flex-col gap-4">
 							{variant === "register" && (
 								<Input
@@ -95,7 +99,7 @@ const Auth = () => {
 							<Input
 								id="email"
 								type="email"
-								label="Email address or phone number"
+								label="Email address"
 								value={email}
 								onChange={(e: any) => setEmail(e.target.value)}
 							/>
