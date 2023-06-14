@@ -78,6 +78,7 @@ model Tag {
 
 model Video {
   id           String   @id @default(dbgenerated("(uuid_generate_v4())::text")) @map("_id") @db.Text
+  userId       String   @db.Text
   title        String
   description  String
   url          String
@@ -85,4 +86,5 @@ model Video {
   thumbnailUrl String
   upload_date  DateTime @default(now())
   tags         Tag[]
+  owner         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

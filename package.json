@@ -31,6 +31,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.9.0",
+    "react-modal": "^3.16.1",
     "react-tag-input": "^6.8.1",
     "react-tailwindcss-select": "^1.8.5",
     "swr": "^2.1.5",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/lodash": "^4.14.195",
+    "@types/react-modal": "^3.16.0",
     "@types/react-tag-input": "^6.6.1",
     "prisma": "^4.15.0"
   }

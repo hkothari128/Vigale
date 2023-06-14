@@ -12,11 +12,13 @@ import useInfoModalStore from "@/hooks/useInfoModalStore";
 
 const TOP_OFFSET = 66;
 
-const Navbar = () => {
+interface NavbarProps {
+	openModal:Function
+}
+const Navbar:React.FC<NavbarProps> = ({openModal}) => {
 	const [showAccountMenu, setShowAccountMenu] = useState(false);
 	const [showMobileMenu, setShowMobileMenu] = useState(false);
 	const [showBackground, setShowBackground] = useState(false);
-	const { isOpen, closeModal, openModal } = useInfoModalStore();
 
 	useEffect(() => {
 		const handleScroll = () => {
